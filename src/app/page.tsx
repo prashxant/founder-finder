@@ -149,8 +149,10 @@ export default function HomePage() {
     URL.revokeObjectURL(blobUrl);
   }
 
+
   return (
     <main className="relative mx-auto grid w-full max-w-6xl gap-5 px-4 pb-16 pt-10 sm:px-6 lg:px-8">
+      {/* hjernejf */}
       <div
         className="pointer-events-none fixed inset-0 -z-10 bg-[repeating-linear-gradient(115deg,transparent,transparent_26px,rgba(16,12,10,0.03)_26px,rgba(16,12,10,0.03)_27px)] opacity-50 mix-blend-multiply"
         aria-hidden="true"

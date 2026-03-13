@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { PostHogProvider } from "./providers";
 
 export const metadata: Metadata = {
   title: "Founder Finder Lab",
@@ -20,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="min-h-screen bg-[linear-gradient(160deg,#f9f3e8_0%,#f1ebdd_100%)] font-['IBM_Plex_Sans','Avenir_Next','Segoe_UI',sans-serif] text-[#171311] antialiased">
-        {children}
+        <PostHogProvider>{children}</PostHogProvider>
       </body>
     </html>
   );

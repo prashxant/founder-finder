@@ -65,11 +65,7 @@ export async function scrapeWebsite(
 ): Promise<{ text: string; links: string[] }> {
   console.log(`[Scraper] Initializing Playwright to scrape: ${url}`);
 
-  // Use project-local browser path in deployments where the home cache is not present.
-  if (!process.env.PLAYWRIGHT_BROWSERS_PATH) {
-    process.env.PLAYWRIGHT_BROWSERS_PATH = "0";
-  }
-
+  // Ensure headless browser works in CI/production environments.
   let browser: Browser | null = null;
 
   try {

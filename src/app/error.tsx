@@ -18,52 +18,62 @@ export default function Error({
   return (
     <main className="relative mx-auto min-h-screen w-full max-w-6xl overflow-hidden px-4 pb-16 pt-10 sm:px-6 lg:px-8">
       <div
-        className="pointer-events-none fixed inset-0 -z-20 bg-[radial-gradient(circle_at_10%_10%,rgba(166,44,44,0.2),transparent_36%),radial-gradient(circle_at_88%_14%,rgba(0,109,119,0.2),transparent_38%),linear-gradient(160deg,#f9f3e8_0%,#f1ebdd_100%)]"
+        className="pointer-events-none fixed inset-0 -z-20 bg-[radial-gradient(circle_at_10%_10%,rgba(166,44,44,0.15),transparent_36%),radial-gradient(circle_at_88%_14%,rgba(0,109,119,0.12),transparent_38%),linear-gradient(160deg,#f9f3e8_0%,#f1ebdd_100%)]"
         aria-hidden="true"
       />
       <div
-        className="pointer-events-none fixed inset-0 -z-10 bg-[repeating-linear-gradient(115deg,transparent,transparent_26px,rgba(16,12,10,0.03)_26px,rgba(16,12,10,0.03)_27px)] opacity-50 mix-blend-multiply"
+        className="pointer-events-none fixed inset-0 -z-10 bg-[repeating-linear-gradient(115deg,transparent,transparent_26px,rgba(16,12,10,0.02)_26px,rgba(16,12,10,0.03)_27px)] opacity-40 mix-blend-multiply"
         aria-hidden="true"
       />
 
-      <section className="relative mx-auto grid max-w-3xl gap-5 rounded-[28px] border border-[#a62c2c45] bg-[rgba(255,241,241,0.86)] p-8 shadow-[0_20px_60px_rgba(45,16,16,0.2)] backdrop-blur-[3px]">
-        <p className="m-0 text-[0.72rem] font-bold uppercase tracking-[0.18em] text-[#7f2020]">
-          Founder Finder
-        </p>
-        <h1 className="m-0 font-['Syne','Avenir_Next','Segoe_UI',sans-serif] text-[clamp(1.7rem,4vw,2.7rem)] leading-[0.98] text-[#7f2020]">
-          Something broke while rendering this page.
-        </h1>
-        <p className="m-0 text-[1rem] text-[#5f2b2b]">
-          Try again, or go back to the home page to restart the flow.
-        </p>
+      <section className="relative mx-auto grid max-w-2xl gap-6 overflow-hidden rounded-[32px] border border-[#a62c2c1f] bg-[rgba(255,241,241,0.76)] p-9 shadow-[0_30px_70px_rgba(45,16,16,0.12)] backdrop-blur-[6px]">
+        {/* Decorative error glow */}
+        <div className="absolute -left-24 -top-24 h-56 w-56 rounded-full bg-[radial-gradient(circle,rgba(166,44,44,0.12),transparent_70%)]" />
 
-        {error.message ? (
-          <pre className="m-0 overflow-x-auto rounded-xl border border-[#a62c2c3d] bg-white/65 p-3 text-[0.8rem] text-[#5f2b2b]">
-            {error.message}
-          </pre>
-        ) : null}
-
-        {error.digest ? (
-          <p className="m-0 text-[0.82rem] font-semibold text-[#7f2020]">
-            Error Digest: {error.digest}
+        <div className="relative">
+          <p className="m-0 text-[0.72rem] font-bold uppercase tracking-[0.2em] text-[#7f2020]">
+            System Interruption
           </p>
-        ) : null}
+          <h1 className="mt-3 font-['Syne','Avenir_Next','Segoe_UI',sans-serif] text-[clamp(1.8rem,4vw,2.8rem)] leading-[1.1] tracking-tight text-[#7f2020]">
+            Something stalled <br />
+            in the <span className="text-[#a62c2c]">pipeline.</span>
+          </h1>
+          <p className="mt-4 max-w-[50ch] text-[1rem] leading-relaxed text-[#5f2b2b]/90">
+            We encountered an unexpected error while processing your request.
+            This could be a temporary API disruption or a parsing issue.
+          </p>
+        </div>
 
-        <div className="flex flex-wrap gap-2.5">
+        {error.message && (
+          <div className="relative mt-2 overflow-hidden rounded-2xl border border-[#a62c2c1a] bg-white/40 p-5 backdrop-blur-[2px]">
+            <p className="mb-2 text-[0.68rem] font-bold uppercase tracking-wider text-[#7f2020]/60">Technical Detail</p>
+            <pre className="m-0 overflow-x-auto text-[0.82rem] font-medium text-[#5f2b2b]">
+              {error.message}
+            </pre>
+          </div>
+        )}
+
+        <div className="flex flex-wrap items-center gap-3 pt-2">
           <button
             type="button"
             onClick={reset}
-            className="rounded-full bg-[linear-gradient(125deg,#b73737,#a62c2c_56%,#872222)] px-5 py-3 text-[0.95rem] font-['Syne','Avenir_Next','Segoe_UI',sans-serif] tracking-[0.03em] text-white transition hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(127,32,32,0.34)]"
+            className="rounded-full bg-[linear-gradient(125deg,#b73737,#a62c2c_56%,#872222)] px-7 py-3.5 text-[0.95rem] font-['Syne','Avenir_Next','Segoe_UI',sans-serif] font-bold tracking-[0.02em] text-white transition hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(127,32,32,0.3)]"
           >
-            Try Again
+            Try Recalibrating
           </button>
           <Link
             href="/"
-            className="rounded-full border border-[#1713112e] bg-white/80 px-5 py-3 text-[0.92rem] font-semibold text-[#171311] transition hover:border-[#ff62356b] hover:text-[#b23e1b]"
+            className="rounded-full border border-[#17131118] bg-white/60 px-7 py-3.5 text-[0.92rem] font-bold text-[#171311] transition hover:bg-white/90 hover:border-[#17131130]"
           >
-            Go Home
+            Return Home
           </Link>
         </div>
+
+        {error.digest && (
+          <p className="mt-4 border-t border-[#a62c2c0a] pt-4 text-[0.7rem] font-medium tracking-tight text-[#7f2020]/40">
+            Internal ID: <span className="font-mono">{error.digest}</span>
+          </p>
+        )}
       </section>
     </main>
   );

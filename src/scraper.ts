@@ -1,4 +1,4 @@
-import { chromium, Page } from "playwright";
+import { Browser, chromium, Page } from "playwright";
 
 const TEAM_PAGE_PATTERNS = [
   "/about",
@@ -65,7 +65,26 @@ export async function scrapeWebsite(
 ): Promise<{ text: string; links: string[] }> {
   console.log(`[Scraper] Initializing Playwright to scrape: ${url}`);
 
-  const browser = await chromium.launch({ headless: true });
+  // Use project-local browser path in deployments where the home cache is not present.
+  if (!process.env.PLAYWRIGHT_BROWSERS_PATH) {
+    process.env.PLAYWRIGHT_BROWSERS_PATH = "0";
+  }
+
+  let browser: Browser | null = null;
+
+  try {
+    browser = await chromium.launch({
+      headless: true,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    });
+  } catch (error) {
+    console.error(
+      "[Scraper] Playwright launch failed. Ensure Chromium is installed during build (npx playwright install chromium).",
+      error,
+    );
+    return { text: "", links: [] };
+  }
+
   const context = await browser.newContext({
     userAgent:
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
@@ -157,7 +176,9 @@ export async function scrapeWebsite(
     console.error(`[Scraper] Critical error scraping ${url}:`, error);
     return { text: "", links: [] };
   } finally {
-    await browser.close();
+    if (browser) {
+      await browser.close();
+    }
   }
 }
 

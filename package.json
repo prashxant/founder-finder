@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "postinstall": "PLAYWRIGHT_BROWSERS_PATH=0 playwright install chromium",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

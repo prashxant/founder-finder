@@ -7,7 +7,6 @@ Founder Finder is a Next.js app that turns a company URL into a founder outreach
 ```bash
 cd founder-finder
 npm install
-npx playwright install chromium
 npm run dev
 ```
 
@@ -36,6 +35,12 @@ npm run dev
 npm run build
 npm run start
 ```
+
+## Deployment Note
+
+- This project uses Playwright at runtime for scraping.
+- `npm install` runs a `postinstall` script that installs Chromium locally (`PLAYWRIGHT_BROWSERS_PATH=0 playwright install chromium`).
+- If your host skips lifecycle scripts, enable them or run `npx playwright install chromium` during the build step.
 
 ## Project Structure
 

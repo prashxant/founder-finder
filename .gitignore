@@ -8,3 +8,4 @@ out/
 *.js.map
 !src/**
 !next-env.d.ts
+.env.local

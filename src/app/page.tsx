@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import posthog from "posthog-js";
 import type { CompanyOutput, Founder } from "@/types";
 
 type LoadState = "idle" | "loading" | "success" | "error";
@@ -91,11 +92,19 @@ export default function HomePage() {
     setError("");
     setResult(null);
 
+    posthog.capture("founder_search_submitted", {
+      company_url: url.trim(),
+      has_tavily_key: Boolean(tavilyKey.trim()),
+      has_icp: Boolean(icp.trim()),
+    });
+
     try {
       const response = await fetch("/api/find", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "X-POSTHOG-DISTINCT-ID": posthog.get_distinct_id(),
+          "X-POSTHOG-SESSION-ID": posthog.get_session_id() ?? "",
         },
         body: JSON.stringify({
           url: url.trim(),
@@ -111,16 +120,33 @@ export default function HomePage() {
         throw new Error(payload.error || "Request failed.");
       }
 
-      setResult(payload as CompanyOutput);
+      const companyResult = payload as CompanyOutput;
+      setResult(companyResult);
       setActiveStep(-1);
       setCompletedStep(PIPELINE_STEPS.length - 1);
       setState("success");
+
+      posthog.capture("founder_search_completed", {
+        company_url: url.trim(),
+        company_name: companyResult.company,
+        founders_found: companyResult.founders.length,
+        has_tavily_key: Boolean(tavilyKey.trim()),
+        has_icp: Boolean(icp.trim()),
+      });
     } catch (caught) {
-      setError(
-        caught instanceof Error ? caught.message : "Unknown request error.",
-      );
+      const errorMessage =
+        caught instanceof Error ? caught.message : "Unknown request error.";
+      setError(errorMessage);
       setActiveStep(-1);
       setState("error");
+
+      posthog.capture("founder_search_failed", {
+        company_url: url.trim(),
+        error_message: errorMessage,
+        has_tavily_key: Boolean(tavilyKey.trim()),
+        has_icp: Boolean(icp.trim()),
+      });
+      posthog.captureException(caught instanceof Error ? caught : new Error(errorMessage));
     }
   }
 
@@ -132,6 +158,11 @@ export default function HomePage() {
     await navigator.clipboard.writeText(JSON.stringify(result, null, 2));
     setCopyStatus("Copied");
     window.setTimeout(() => setCopyStatus(""), 1200);
+
+    posthog.capture("result_copied", {
+      company_name: result.company,
+      founders_count: result.founders.length,
+    });
   }
 
   function downloadJson() {
@@ -147,6 +178,11 @@ export default function HomePage() {
     link.download = `${result.company || "founder"}-profile.json`;
     link.click();
     URL.revokeObjectURL(blobUrl);
+
+    posthog.capture("result_downloaded", {
+      company_name: result.company,
+      founders_count: result.founders.length,
+    });
   }
 
 

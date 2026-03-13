@@ -1,0 +1,10 @@
+node_modules/
+.env
+dist/
+.next/
+out/
+*.js
+*.d.ts
+*.js.map
+!src/**
+!next-env.d.ts

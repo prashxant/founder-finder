@@ -134,8 +134,13 @@ export default function HomePage() {
         has_icp: Boolean(icp.trim()),
       });
     } catch (caught) {
-      const errorMessage =
-        caught instanceof Error ? caught.message : "Unknown request error.";
+      const isFetchNetworkError =
+        caught instanceof TypeError && caught.message === "Failed to fetch";
+      const errorMessage = isFetchNetworkError
+        ? "Unable to reach the API. Make sure the app server is running and reachable."
+        : caught instanceof Error
+          ? caught.message
+          : "Unknown request error.";
       setError(errorMessage);
       setActiveStep(-1);
       setState("error");
@@ -146,7 +151,12 @@ export default function HomePage() {
         has_tavily_key: Boolean(tavilyKey.trim()),
         has_icp: Boolean(icp.trim()),
       });
-      posthog.captureException(caught instanceof Error ? caught : new Error(errorMessage));
+
+      if (!isFetchNetworkError) {
+        posthog.captureException(
+          caught instanceof Error ? caught : new Error(errorMessage),
+        );
+      }
     }
   }
 
@@ -184,7 +194,6 @@ export default function HomePage() {
       founders_count: result.founders.length,
     });
   }
-
 
   return (
     <main className="relative mx-auto grid w-full max-w-6xl gap-5 px-4 pb-16 pt-10 sm:px-6 lg:px-8">

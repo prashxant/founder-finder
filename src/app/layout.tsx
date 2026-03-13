@@ -1,23 +1,15 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Sans, Syne } from "next/font/google";
 import "./globals.css";
-
-const bodyFont = IBM_Plex_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-body",
-});
-
-const headingFont = Syne({
-  subsets: ["latin"],
-  weight: ["500", "700", "800"],
-  variable: "--font-heading",
-});
 
 export const metadata: Metadata = {
   title: "Founder Finder Lab",
   description:
     "Find founder profiles, contact channels, and personalized outreach drafts from a company website.",
+  icons: {
+    icon: "/fevicon.png",
+    shortcut: "/fevicon.png",
+    apple: "/fevicon.png",
+  },
 };
 
 export default function RootLayout({
@@ -27,7 +19,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${bodyFont.variable} ${headingFont.variable}`}>
+      <body className="min-h-screen bg-[linear-gradient(160deg,#f9f3e8_0%,#f1ebdd_100%)] font-['IBM_Plex_Sans','Avenir_Next','Segoe_UI',sans-serif] text-[#171311] antialiased">
         {children}
       </body>
     </html>
